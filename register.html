@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card" style="max-width:400px;margin:2rem auto;">
+    <h1>Registro</h1>
+    <form id="register-form">
+      <label>Nombre:<br><input id="name" required></label><br><br>
+      <label>Correo:<br><input id="email" type="email" required></label><br><br>
+      <button class="btn" type="submit">Guardar</button>
+    </form>
+  </main>
+<script type="module">
+import { GameState } from './gameState.js';
+const form=document.getElementById('register-form');
+form.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const name=document.getElementById('name').value.trim();
+  const email=document.getElementById('email').value.trim();
+  if(!name||!email) return;
+  await fetch('https://script.google.com/macros/s/AKfycbxWb1aaP8S_nGKPUwiLexT_3Z2Zr66l0k--G0DK7UKyO_05-FsmQCKrO3hGHOcK-L3F/exec',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:'register',name,email})
+  });
+  GameState.setUser({name,email});
+  location.href='index.html';
+});
+</script>
+</body>
+</html>

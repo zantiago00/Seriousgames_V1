@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serious Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card" style="max-width:600px;margin:2rem auto;">
+    <h1>Serious Game</h1>
+    <p id="user-info"></p>
+    <p>Puntaje total: <span id="total-score">0</span></p>
+    <div id="games" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;"></div>
+  </main>
+<script type="module">
+import { GameState } from './gameState.js';
+const user=GameState.getUser();
+if(!user){
+  location.href='register.html';
+}
+const info=document.getElementById('user-info');
+info.textContent=`${user.name} (${user.email})`;
+const total=document.getElementById('total-score');
+function refresh(){
+  total.textContent=GameState.getTotalScore();
+}
+refresh();
+const games=[
+  {key:'definiciones',name:'Definiciones',path:'01. Definiciones/index.html'},
+  {key:'completar',name:'Completar palabras',path:'02. Completar palabras/index.html'},
+  {key:'unir',name:'Unir palabras',path:'03. Unir palabras/index.html'},
+  {key:'ahorcado',name:'Ahorcado',path:'04. Ahorcado/index.html'}
+];
+const container=document.getElementById('games');
+for(const g of games){
+  const btn=document.createElement('a');
+  btn.textContent=g.name + (GameState.isUnlocked(g.key)||g.key==='definiciones'? '' : ' 🔒');
+  btn.href=g.path;
+  btn.className='btn';
+  if(g.key!=='definiciones' && !GameState.isUnlocked(g.key)){
+    btn.classList.add('disabled');
+    btn.href='#';
+    btn.setAttribute('aria-disabled','true');
+  }
+  container.appendChild(btn);
+}
+</script>
+</body>
+</html>

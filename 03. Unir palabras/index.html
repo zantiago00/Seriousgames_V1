@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Juego de Emparejamiento: EDS 2.0</title>
+    <link rel="stylesheet" href="../style.css">
     <style>
         :root {
             --background-color: #f4f7f9;
@@ -21,7 +22,6 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--background-color);
             color: var(--font-color);
             margin: 0;
@@ -178,7 +178,9 @@
         <div class="results" id="results-area"></div>
     </div>
 
-    <script>
+    <script type="module">
+        import { GameState } from '../gameState.js';
+        import { sendScore } from '../utils/sendScore.js';
         document.addEventListener('DOMContentLoaded', () => {
             const gameData = [
                 { id: 1, concept: 'Facilitación', definition: 'El proceso guiado por maestros o investigadores durante la creación de la historia, diferenciándolo de los medios "Hazlo tú mismo" (DIY).' },
@@ -331,6 +333,9 @@
                 });
 
                 const score = correctCount * 10 - incorrectCount * 5;
+                GameState.saveScore('unir', score);
+                GameState.unlock('ahorcado');
+                sendScore('unir', score);
                 resultsArea.innerHTML = `
                     <span class="correct">Aciertos: ${correctCount}</span> | 
                     <span class="incorrect">Errores: ${incorrectCount}</span>
@@ -354,5 +359,4 @@
         });
     </script>
 
-</body>
-</html>
+</body></html>

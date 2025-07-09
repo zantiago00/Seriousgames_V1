@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego: ¿Qué es EDS?</title>
+    <link rel="stylesheet" href="../style.css">
     <style>
         :root {
             --background-color: #f4f7f9;
@@ -16,8 +17,6 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--background-color);
             color: var(--font-color);
             margin: 0;
             padding: 20px;
@@ -135,10 +134,13 @@
         <button id="restart-btn">Jugar de Nuevo</button>
     </div>
 
-    <script>
+    <script type="module">
+        import { GameState } from '../gameState.js';
+        import { sendScore } from '../utils/sendScore.js';
         const optionsContainer = document.getElementById('options-container');
         const feedbackElement = document.getElementById('feedback');
         const restartBtn = document.getElementById('restart-btn');
+        let currentScore = 0;
 
         const gameData = {
             question: "Según la definición de Wu y Chen (2020), ¿cuál de las siguientes opciones describe mejor el concepto de <strong>\"Educational Digital Storytelling\" (EDS)</strong>?",
@@ -205,15 +207,20 @@
             });
             
             if (isCorrect) {
+                currentScore = 10;
                 selectedBtn.classList.add('correct');
                 feedbackElement.textContent = '¡Correcto! ✅ Esta definición incluye la facilitación y el entorno comunitario.';
                 feedbackElement.classList.add('correct');
+                GameState.unlock('completar');
             } else {
+                currentScore = 0;
                 selectedBtn.classList.add('incorrect');
                 feedbackElement.innerHTML = 'Incorrecto. ❌ Recuerda que EDS es un proceso <strong>facilitado</strong> en un <strong>entorno comunitario</strong>.';
                 feedbackElement.classList.add('incorrect');
             }
 
+            GameState.saveScore('definiciones', currentScore);
+            sendScore('definiciones', currentScore);
             restartBtn.style.display = 'block';
         }
 
@@ -223,5 +230,4 @@
         document.addEventListener('DOMContentLoaded', startGame);
     </script>
 
-</body>
-</html>
+</body></html>
