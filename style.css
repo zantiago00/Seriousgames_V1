@@ -52,3 +52,13 @@ button:focus,
 }
 
 .hidden { display: none; }
+
+.game-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.game-entry .score {
+  margin-left: 0.5rem;
+  font-weight: bold;
+}

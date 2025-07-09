@@ -34,6 +34,8 @@ const games=[
 ];
 const container=document.getElementById('games');
 for(const g of games){
+  const entry=document.createElement('div');
+  entry.className='game-entry';
   const btn=document.createElement('a');
   btn.textContent=g.name + (GameState.isUnlocked(g.key)||g.key==='definiciones'? '' : ' 🔒');
   btn.href=g.path;
@@ -43,7 +45,12 @@ for(const g of games){
     btn.href='#';
     btn.setAttribute('aria-disabled','true');
   }
-  container.appendChild(btn);
+  const score=document.createElement('span');
+  score.className='score';
+  score.textContent='Puntaje: '+GameState.getScore(g.key);
+  entry.appendChild(btn);
+  entry.appendChild(score);
+  container.appendChild(entry);
 }
 </script>
 </body>

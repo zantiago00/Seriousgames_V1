@@ -74,6 +74,7 @@
              <button id="ranking-button" class="btn" style="flex:1;background:#777;">Ranking</button>
              <button id="reset-button" class="btn" style="flex:1;">Reiniciar</button>
         </div>
+        <a id="menu-button" href="../index.html" class="btn" style="margin-top:0.5rem;display:none;width:100%;">Menú Principal</a>
 
     </div>
     
@@ -118,6 +119,7 @@
             const ctx = canvas.getContext('2d');
             const resetButton = document.getElementById('reset-button');
             const rankingButton = document.getElementById('ranking-button');
+            const menuButton = document.getElementById('menu-button');
             
             // Modales
             const nameModal = document.getElementById('name-modal');
@@ -146,6 +148,7 @@
                 guessedLetters.clear();
                 mistakes = 0;
                 gameEnded = false;
+                menuButton.style.display = 'none';
                 
                 wordContainer.innerHTML = '';
                 PHRASE.split('').forEach(char => {
@@ -212,6 +215,7 @@
 
                 // Mostrar el modal para ingresar el nombre
                 setTimeout(() => showModal(nameModal), 500);
+                menuButton.style.display = 'block';
             }
 
             function checkWinCondition() {
