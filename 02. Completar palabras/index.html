@@ -192,6 +192,7 @@
             </div>
         
         <button class="restart-btn" id="restart-btn">Reiniciar Juego</button>
+        <a id="menu-btn" href="../index.html" class="restart-btn" style="display:none;margin-top:10px;">Menú Principal</a>
     </div>
 
     <script type="module">
@@ -206,6 +207,7 @@
             const wordOptionsContainer = document.getElementById('word-options-container');
             const scoreElement = document.getElementById('score');
             const restartBtn = document.getElementById('restart-btn');
+            const menuBtn = document.getElementById('menu-btn');
 
             let currentScore = 0;
             let selectedBlank = null;
@@ -232,6 +234,7 @@
                 currentScore = 0;
                 completedBlanks = 0;
                 selectedBlank = null;
+                menuBtn.style.display = 'none';
                 updateScore(0);
                 
                 // Limpiar contenedores
@@ -329,6 +332,7 @@
                     GameState.saveScore('completar', currentScore);
                     GameState.unlock('unir');
                     sendScore('completar', currentScore);
+                    menuBtn.style.display = 'block';
                     setTimeout(() => alert(`¡Felicidades! Has completado el texto con una puntuación de ${currentScore}.`), 100);
                 }
             }
@@ -353,5 +357,4 @@
             initGame();
         });
     </script>
-
-</body></html>
+</body></html>

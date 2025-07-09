@@ -132,6 +132,7 @@
 
         <div id="feedback"></div>
         <button id="restart-btn">Jugar de Nuevo</button>
+        <a id="menu-btn" href="../index.html" class="btn" style="display:none;margin-top:10px;">Menú Principal</a>
     </div>
 
     <script type="module">
@@ -140,6 +141,7 @@
         const optionsContainer = document.getElementById('options-container');
         const feedbackElement = document.getElementById('feedback');
         const restartBtn = document.getElementById('restart-btn');
+        const menuBtn = document.getElementById('menu-btn');
         let currentScore = 0;
 
         const gameData = {
@@ -178,6 +180,7 @@
             feedbackElement.innerHTML = '';
             feedbackElement.className = '';
             restartBtn.style.display = 'none';
+            menuBtn.style.display = 'none';
 
             // Barajar y mostrar opciones
             let shuffledAnswers = [...gameData.answers];
@@ -209,19 +212,20 @@
             if (isCorrect) {
                 currentScore = 10;
                 selectedBtn.classList.add('correct');
-                feedbackElement.textContent = '¡Correcto! ✅ Esta definición incluye la facilitación y el entorno comunitario.';
+                feedbackElement.textContent = '¡Correcto! ✅ Esta definición incluye la facilitación y el entorno comunitario. Puntaje: 10';
                 feedbackElement.classList.add('correct');
                 GameState.unlock('completar');
             } else {
                 currentScore = 0;
                 selectedBtn.classList.add('incorrect');
-                feedbackElement.innerHTML = 'Incorrecto. ❌ Recuerda que EDS es un proceso <strong>facilitado</strong> en un <strong>entorno comunitario</strong>.';
+                feedbackElement.innerHTML = 'Incorrecto. ❌ Recuerda que EDS es un proceso <strong>facilitado</strong> en un <strong>entorno comunitario</strong>. Puntaje: 0';
                 feedbackElement.classList.add('incorrect');
             }
 
             GameState.saveScore('definiciones', currentScore);
             sendScore('definiciones', currentScore);
             restartBtn.style.display = 'block';
+            menuBtn.style.display = 'block';
         }
 
         restartBtn.addEventListener('click', startGame);
@@ -229,5 +233,4 @@
         // Iniciar el juego al cargar la página
         document.addEventListener('DOMContentLoaded', startGame);
     </script>
-
-</body></html>
+</body></html>

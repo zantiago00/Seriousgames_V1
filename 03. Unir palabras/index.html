@@ -176,6 +176,7 @@
         </div>
 
         <div class="results" id="results-area"></div>
+        <button id="menu-btn" style="display:none;margin-top:10px;">Menú Principal</button>
     </div>
 
     <script type="module">
@@ -194,6 +195,7 @@
             const definitionsColumn = document.getElementById('definitions-column');
             const actionButton = document.getElementById('action-button');
             const resultsArea = document.getElementById('results-area');
+            const menuBtn = document.getElementById('menu-btn');
             const svgCanvas = document.getElementById('game-svg');
 
             let selectedConcept = null;
@@ -280,6 +282,7 @@
                 gameLocked = false;
                 connections = [];
                 selectedConcept = null;
+                menuBtn.style.display = 'none';
                 
                 conceptsColumn.innerHTML = '';
                 definitionsColumn.innerHTML = '';
@@ -337,12 +340,13 @@
                 GameState.unlock('ahorcado');
                 sendScore('unir', score);
                 resultsArea.innerHTML = `
-                    <span class="correct">Aciertos: ${correctCount}</span> | 
+                    <span class="correct">Aciertos: ${correctCount}</span> |
                     <span class="incorrect">Errores: ${incorrectCount}</span>
                     <br>
                     <strong>Puntuación Final: ${score}</strong>
                 `;
-                
+                menuBtn.style.display = 'block';
+
                 actionButton.textContent = 'Reiniciar';
                 actionButton.disabled = false;
             }
@@ -358,5 +362,4 @@
             initializeGame();
         });
     </script>
-
-</body></html>
+</body></html>
