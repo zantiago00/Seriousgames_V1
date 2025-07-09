@@ -1,5 +1,6 @@
 import { GameState } from '../gameState.js';
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbxWb1aaP8S_nGKPUwiLexT_3Z2Zr66l0k--G0DK7UKyO_05-FsmQCKrO3hGHOcK-L3F/exec';
+const ENDPOINT =
+  'https://script.google.com/macros/s/AKfycby-b4Jn17hr1W_V3jcvkhM-fp7i2kHHvO7f8jCIOMySZQ3BJWQUJYP0Yhh4BDcTRPhQ/exec';
 export async function sendScore(gameKey, score){
   const { name, email } = GameState.getUser();
   if(!name || !email) return;
