@@ -24,7 +24,7 @@ form.addEventListener('submit',async e=>{
   const email=document.getElementById('email').value.trim();
   if(!name||!email) return;
   try {
-    await fetch('https://script.google.com/macros/s/AKfycbxWb1aaP8S_nGKPUwiLexT_3Z2Zr66l0k--G0DK7UKyO_05-FsmQCKrO3hGHOcK-L3F/exec',{
+    await fetch('https://script.google.com/macros/s/AKfycby-b4Jn17hr1W_V3jcvkhM-fp7i2kHHvO7f8jCIOMySZQ3BJWQUJYP0Yhh4BDcTRPhQ/exec',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({type:'register',name,email})
