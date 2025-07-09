@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego del Ahorcado: Digital Storytelling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: manipulation;
+        }
+        .keyboard-btn, .input-error {
+            transition: all 0.2s ease-in-out;
+        }
+        .keyboard-btn:disabled {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+        .word-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .letter-box {
+            width: 2rem;
+            height: 3rem;
+            border-bottom: 3px solid #4a5568;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .letter-box.space {
+            border: none;
+            width: 1rem;
+        }
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        .input-error {
+            border-color: #ef4444; /* red-500 */
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col gap-4">
+
+        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg aspect-square w-full">
+            <canvas id="hangman-canvas"></canvas>
+        </div>
+
+        <div id="word-container" class="word-container py-4"></div>
+
+        <div id="keyboard" class="grid grid-cols-7 sm:grid-cols-8 gap-1.5 text-sm"></div>
+
+        <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg">
+            <p class="text-sm">
+                <b>Educational Digital Storytelling [EDS]</b> se entiende como la producción facilitada de una historia digital corta en un entorno comunitario educativo. La historia generalmente contiene una mezcla de imágenes digitales, texto, narración grabada y/o música. Esta definición amplía la definición inicial de Lambert de DS como una película corta y narrada (2013) y destaca sus dos características en el contexto actual. En primer lugar, EDS es una producción de medios facilitada (Lambert 2013). La facilitación en el proceso de producción, generalmente por parte de profesores y/o investigadores capacitados, lo distingue de los medios construidos en el entorno en línea o los medios "Hágalo usted mismo" (por ejemplo, videos generados por YouTubers) (Lambert 2013). Además, los estudios de EDS en esta revisión se llevan a cabo en un entorno comunitario educativo. (Wu y Chen 2020: 2)
+            </p>
+        </div>
+        
+        <div class="flex gap-2">
+             <button id="ranking-button" class="w-full bg-gray-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-600 transition-colors">Ranking</button>
+             <button id="reset-button" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Reiniciar</button>
+        </div>
+
+    </div>
+    
+    <div id="name-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-xs mx-auto">
+            <h2 id="name-modal-title" class="text-2xl font-bold mb-2"></h2>
+            <p id="name-modal-text" class="mb-4"></p>
+            <input type="text" id="player-name" class="border-2 border-gray-300 rounded-lg w-full p-2 mb-4 text-center" placeholder="Tu Nombre" maxlength="10">
+            <button id="save-score-button" class="w-full bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors">Guardar en Ranking</button>
+        </div>
+    </div>
+
+    <div id="ranking-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-xs mx-auto">
+            <h2 class="text-2xl font-bold mb-4">🏆 Ranking 🏆</h2>
+            <div class="max-h-64 overflow-y-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-4 py-2">#</th>
+                            <th scope="col" class="px-4 py-2">Nombre</th>
+                            <th scope="col" class="px-4 py-2">Puntaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-body">
+                        </tbody>
+                </table>
+            </div>
+            <button id="ranking-close-button" class="mt-6 bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Constantes y Elementos del DOM
+            const wordContainer = document.getElementById('word-container');
+            const keyboardContainer = document.getElementById('keyboard');
+            const canvas = document.getElementById('hangman-canvas');
+            const ctx = canvas.getContext('2d');
+            const resetButton = document.getElementById('reset-button');
+            const rankingButton = document.getElementById('ranking-button');
+            
+            // Modales
+            const nameModal = document.getElementById('name-modal');
+            const nameModalTitle = document.getElementById('name-modal-title');
+            const nameModalText = document.getElementById('name-modal-text');
+            const playerNameInput = document.getElementById('player-name');
+            const saveScoreButton = document.getElementById('save-score-button');
+
+            const rankingModal = document.getElementById('ranking-modal');
+            const rankingBody = document.getElementById('ranking-body');
+            const rankingCloseButton = document.getElementById('ranking-close-button');
+
+            // Configuración del Juego
+            const PHRASE = "DIGITAL STORYTELLING";
+            const ALPHABET = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('');
+            const MAX_MISTAKES = 6;
+            const RANKING_KEY = 'hangmanRankingEDS_v1'; // Nueva key para este concepto
+
+            let guessedLetters = new Set();
+            let mistakes = 0;
+            let gameEnded = false;
+
+            // --- Funciones Principales del Juego ---
+
+            function setupGame() {
+                guessedLetters.clear();
+                mistakes = 0;
+                gameEnded = false;
+                
+                wordContainer.innerHTML = '';
+                PHRASE.split('').forEach(char => {
+                    const letterBox = document.createElement('div');
+                    if (char === ' ') {
+                        letterBox.className = 'letter-box space';
+                    } else {
+                        letterBox.className = 'letter-box';
+                        letterBox.dataset.letter = char;
+                    }
+                    wordContainer.appendChild(letterBox);
+                });
+
+                keyboardContainer.innerHTML = '';
+                ALPHABET.forEach(letter => {
+                    const button = document.createElement('button');
+                    button.textContent = letter;
+                    button.className = 'keyboard-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold p-2 rounded-md';
+                    button.addEventListener('click', () => handleGuess(letter, button));
+                    keyboardContainer.appendChild(button);
+                });
+                
+                resizeCanvas();
+                drawGallows();
+                resetButton.textContent = "Reiniciar";
+            }
+
+            function handleGuess(letter, button) {
+                if (gameEnded) return;
+
+                button.disabled = true;
+                guessedLetters.add(letter);
+
+                if (PHRASE.includes(letter)) {
+                    revealLetters(letter);
+                    checkWinCondition();
+                } else {
+                    mistakes++;
+                    drawHangmanPart();
+                    checkLoseCondition();
+                }
+            }
+            
+            function endGame() {
+                gameEnded = true;
+                keyboardContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                resetButton.textContent = "Jugar de Nuevo";
+            }
+
+            // --- Lógica de Victoria y Derrota ---
+
+            function handleGameEnd(isWin) {
+                endGame();
+
+                if (isWin) {
+                    nameModalTitle.textContent = '¡Ganaste!';
+                    nameModalText.textContent = 'Ingresa tu nombre para guardar tu puntaje.';
+                } else {
+                    // Revelar la palabra si el jugador pierde
+                    PHRASE.replace(/ /g, '').split('').forEach(l => revealLetters(l));
+                    nameModalTitle.textContent = '¡Perdiste!';
+                    nameModalText.textContent = `La frase era "${PHRASE}". Ingresa tu nombre para guardar tu resultado.`;
+                }
+
+                // Mostrar el modal para ingresar el nombre
+                setTimeout(() => showModal(nameModal), 500);
+            }
+
+            function checkWinCondition() {
+                if (gameEnded) return;
+                const uniqueLettersInPhrase = [...new Set(PHRASE.replace(/ /g, ''))];
+                const won = uniqueLettersInPhrase.every(l => guessedLetters.has(l));
+                if (won) {
+                    handleGameEnd(true);
+                }
+            }
+
+            function checkLoseCondition() {
+                if (gameEnded) return;
+                if (mistakes >= MAX_MISTAKES) {
+                    handleGameEnd(false);
+                }
+            }
+
+            function revealLetters(letter) {
+                document.querySelectorAll(`.letter-box[data-letter="${letter}"]`).forEach(box => {
+                    box.textContent = letter;
+                });
+            }
+
+            // --- Sistema de Ranking y Puntuación ---
+
+            function getRankings() {
+                const rankings = localStorage.getItem(RANKING_KEY);
+                return rankings ? JSON.parse(rankings) : [];
+            }
+
+            function saveScore() {
+                const name = playerNameInput.value.trim();
+                if (!name) {
+                    playerNameInput.classList.add('input-error');
+                    setTimeout(() => playerNameInput.classList.remove('input-error'), 500);
+                    return;
+                }
+                
+                // Si el jugador pierde (6 errores), el puntaje es 0. De lo contrario, se calcula.
+                const score = (mistakes < MAX_MISTAKES) ? (MAX_MISTAKES - mistakes) * 10 : 0;
+                
+                const rankings = getRankings();
+                
+                rankings.push({ name, score });
+                rankings.sort((a, b) => b.score - a.score); // Ordenar de mayor a menor puntaje
+                
+                localStorage.setItem(RANKING_KEY, JSON.stringify(rankings.slice(0, 100))); // Guardar top 100
+                
+                hideModal(nameModal);
+                playerNameInput.value = '';
+                displayRanking(); // Mostrar el ranking actualizado
+            }
+
+            function displayRanking() {
+                const rankings = getRankings();
+                rankingBody.innerHTML = ''; // Limpiar tabla
+
+                if (rankings.length === 0) {
+                    rankingBody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-gray-500">Aún no hay puntajes. ¡Sé el primero!</td></tr>';
+                } else {
+                    rankings.forEach((entry, index) => {
+                        const row = document.createElement('tr');
+                        row.className = 'bg-white border-b';
+                        row.innerHTML = `
+                            <td class="px-4 py-2 font-medium text-gray-900">${index + 1}</td>
+                            <td class="px-4 py-2">${entry.name}</td>
+                            <td class="px-4 py-2 font-bold ${entry.score === 0 ? 'text-red-500' : 'text-green-600'}">${entry.score}</td>
+                        `;
+                        rankingBody.appendChild(row);
+                    });
+                }
+                showModal(rankingModal);
+            }
+
+            // --- Manejo de Modales ---
+
+            function showModal(modalElement) {
+                modalElement.classList.remove('hidden');
+                setTimeout(() => modalElement.style.opacity = 1, 10);
+            }
+
+            function hideModal(modalElement) {
+                modalElement.style.opacity = 0;
+                setTimeout(() => modalElement.classList.add('hidden'), 250);
+            }
+
+            // --- Funciones de Dibujo en Canvas ---
+            
+            function resizeCanvas() {
+                const size = canvas.parentElement.clientWidth;
+                canvas.width = size;
+                canvas.height = size;
+            }
+
+            function drawGallows() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = '#374151';
+                ctx.lineWidth = Math.max(2, canvas.width * 0.01);
+                const w = canvas.width, h = canvas.height;
+                ctx.beginPath();
+                ctx.moveTo(w * 0.1, h * 0.9); ctx.lineTo(w * 0.9, h * 0.9);
+                ctx.moveTo(w * 0.25, h * 0.9); ctx.lineTo(w * 0.25, h * 0.1);
+                ctx.lineTo(w * 0.65, h * 0.1);
+                ctx.lineTo(w * 0.65, h * 0.2);
+                ctx.stroke();
+            }
+
+            function drawHangmanPart() {
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = Math.max(2, canvas.width * 0.01);
+                const w = canvas.width, h = canvas.height;
+                ctx.beginPath();
+                switch (mistakes) {
+                    case 1: ctx.arc(w * 0.65, h * 0.3, h * 0.1, 0, Math.PI * 2); break; // Cabeza
+                    case 2: ctx.moveTo(w * 0.65, h * 0.4); ctx.lineTo(w * 0.65, h * 0.65); break; // Tronco
+                    case 3: ctx.moveTo(w * 0.65, h * 0.45); ctx.lineTo(w * 0.5, h * 0.55); break; // Brazo Izq
+                    case 4: ctx.moveTo(w * 0.65, h * 0.45); ctx.lineTo(w * 0.8, h * 0.55); break; // Brazo Der
+                    case 5: ctx.moveTo(w * 0.65, h * 0.65); ctx.lineTo(w * 0.5, h * 0.8); break; // Pierna Izq
+                    case 6: ctx.moveTo(w * 0.65, h * 0.65); ctx.lineTo(w * 0.8, h * 0.8); break; // Pierna Der
+                }
+                ctx.stroke();
+            }
+            
+            function redrawAll() {
+                resizeCanvas();
+                drawGallows();
+                const savedMistakes = mistakes;
+                for(let i = 1; i <= savedMistakes; i++) {
+                    mistakes = i;
+                    drawHangmanPart();
+                }
+                mistakes = savedMistakes;
+            }
+
+            // --- Event Listeners ---
+            resetButton.addEventListener('click', setupGame);
+            saveScoreButton.addEventListener('click', saveScore);
+            rankingButton.addEventListener('click', displayRanking);
+            rankingCloseButton.addEventListener('click', () => hideModal(rankingModal));
+            window.addEventListener('resize', redrawAll);
+            
+            // Iniciar el juego
+            setupGame();
+        });
+    </script>
+
+</body>
+</html>
