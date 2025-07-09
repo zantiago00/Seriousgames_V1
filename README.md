@@ -1,6 +1,6 @@
 # Serious Game para Celulares
 
-Este repositorio contiene cuatro mini-juegos educativos desarrollados en HTML, CSS y JavaScript. Cada juego puede abrirse directamente en un navegador móvil u ordenador y está pensado como parte de un *Serious Game* sobre **Educational Digital Storytelling** (EDS).
+Este repositorio contiene cuatro mini-juegos educativos desarrollados en HTML, CSS y JavaScript. Ahora todos se integran en un único hub con registro de usuario y envío de puntajes a Google Sheets. El conjunto forma un *Serious Game* sobre **Educational Digital Storytelling** (EDS).
 
 ## Estructura
 
@@ -9,7 +9,7 @@ Este repositorio contiene cuatro mini-juegos educativos desarrollados en HTML, C
 - `03. Unir palabras/` – Juego de emparejar conceptos con sus definiciones.
 - `04. Ahorcado/` – Versión sencilla del juego del ahorcado con sistema de ranking.
 
-Cada carpeta contiene un único archivo `index.html` con todo el código necesario para ejecutar el juego.
+Cada carpeta mantiene su propio `index.html`, pero puedes acceder a ellos desde `index.html` en la raíz.
 
 ## Uso rápido
 
@@ -18,6 +18,24 @@ Cada carpeta contiene un único archivo `index.html` con todo el código necesar
 3. El diseño está optimizado para pantallas de teléfonos en orientación vertical.
 
 No es necesario instalar dependencias. Solo se requiere un navegador moderno con soporte para JavaScript.
+
+### Reiniciar progreso
+
+Abre la consola del navegador y ejecuta:
+
+```js
+localStorage.clear();
+```
+
+### Cambiar el endpoint
+
+El envío de registros y puntajes usa el archivo `utils/sendScore.js`. Modifica la constante `ENDPOINT` o define la variable `VITE_SHEETS_ENDPOINT` si trabajas con un bundler.
+
+### Añadir nuevos mini-juegos
+
+1. Crea una carpeta numerada (`05. Nombre/`).
+2. Coloca un `index.html` enlazando `../style.css` y usa módulos existentes (`gameState.js`, `sendScore.js`).
+3. Agrega el nuevo juego en el array `games` de `index.html` en la raíz.
 
 ## Contribución
 

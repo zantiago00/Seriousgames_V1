@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego del Ahorcado: Digital Storytelling</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -55,62 +52,64 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body>
 
-    <div class="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col gap-4">
+    <div class="card" style="max-width:400px;margin:1rem auto;display:flex;flex-direction:column;gap:1rem;">
 
-        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg aspect-square w-full">
+        <div style="background:#f0f0f0;border:2px solid #ccc;border-radius:10px;aspect-ratio:1/1;">
             <canvas id="hangman-canvas"></canvas>
         </div>
 
-        <div id="word-container" class="word-container py-4"></div>
+        <div id="word-container" class="word-container" style="padding:1rem 0;"></div>
 
-        <div id="keyboard" class="grid grid-cols-7 sm:grid-cols-8 gap-1.5 text-sm"></div>
+        <div id="keyboard" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.3rem;font-size:0.9rem;"></div>
 
-        <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg">
-            <p class="text-sm">
+        <div style="background:#eef6ff;border:1px solid #bcd; padding:0.5rem;border-radius:8px;">
+            <p style="font-size:0.85rem;">
                 <b>Educational Digital Storytelling [EDS]</b> se entiende como la producción facilitada de una historia digital corta en un entorno comunitario educativo. La historia generalmente contiene una mezcla de imágenes digitales, texto, narración grabada y/o música. Esta definición amplía la definición inicial de Lambert de DS como una película corta y narrada (2013) y destaca sus dos características en el contexto actual. En primer lugar, EDS es una producción de medios facilitada (Lambert 2013). La facilitación en el proceso de producción, generalmente por parte de profesores y/o investigadores capacitados, lo distingue de los medios construidos en el entorno en línea o los medios "Hágalo usted mismo" (por ejemplo, videos generados por YouTubers) (Lambert 2013). Además, los estudios de EDS en esta revisión se llevan a cabo en un entorno comunitario educativo. (Wu y Chen 2020: 2)
             </p>
         </div>
         
-        <div class="flex gap-2">
-             <button id="ranking-button" class="w-full bg-gray-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-600 transition-colors">Ranking</button>
-             <button id="reset-button" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Reiniciar</button>
+        <div style="display:flex;gap:0.5rem;">
+             <button id="ranking-button" class="btn" style="flex:1;background:#777;">Ranking</button>
+             <button id="reset-button" class="btn" style="flex:1;">Reiniciar</button>
         </div>
 
     </div>
     
-    <div id="name-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-xs mx-auto">
+    <div id="name-modal" class="modal" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;">
+        <div class="card" style="max-width:300px;text-align:center;">
             <h2 id="name-modal-title" class="text-2xl font-bold mb-2"></h2>
             <p id="name-modal-text" class="mb-4"></p>
-            <input type="text" id="player-name" class="border-2 border-gray-300 rounded-lg w-full p-2 mb-4 text-center" placeholder="Tu Nombre" maxlength="10">
-            <button id="save-score-button" class="w-full bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors">Guardar en Ranking</button>
+            <input type="text" id="player-name" style="width:100%;padding:0.5rem;margin-bottom:1rem;" placeholder="Tu Nombre" maxlength="10">
+            <button id="save-score-button" class="btn" style="width:100%;background:#2f9e44;">Guardar en Ranking</button>
         </div>
     </div>
 
-    <div id="ranking-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
-        <div class="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-xs mx-auto">
+    <div id="ranking-modal" class="modal" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;">
+        <div class="card" style="text-align:center;max-width:300px;">
             <h2 class="text-2xl font-bold mb-4">🏆 Ranking 🏆</h2>
-            <div class="max-h-64 overflow-y-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <div style="max-height:200px;overflow-y:auto;">
+                <table style="width:100%;font-size:0.9rem;text-align:left;">
+                    <thead>
                         <tr>
-                            <th scope="col" class="px-4 py-2">#</th>
-                            <th scope="col" class="px-4 py-2">Nombre</th>
-                            <th scope="col" class="px-4 py-2">Puntaje</th>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Puntaje</th>
                         </tr>
                     </thead>
                     <tbody id="ranking-body">
                         </tbody>
                 </table>
             </div>
-            <button id="ranking-close-button" class="mt-6 bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-colors">Cerrar</button>
+            <button id="ranking-close-button" class="btn" style="margin-top:1rem;">Cerrar</button>
         </div>
     </div>
 
 
-    <script>
+    <script type="module">
+        import { GameState } from '../gameState.js';
+        import { sendScore } from '../utils/sendScore.js';
         document.addEventListener('DOMContentLoaded', () => {
             // Constantes y Elementos del DOM
             const wordContainer = document.getElementById('word-container');
@@ -254,6 +253,8 @@
                 
                 // Si el jugador pierde (6 errores), el puntaje es 0. De lo contrario, se calcula.
                 const score = (mistakes < MAX_MISTAKES) ? (MAX_MISTAKES - mistakes) * 10 : 0;
+                GameState.saveScore('ahorcado', score);
+                sendScore('ahorcado', score);
                 
                 const rankings = getRankings();
                 
@@ -272,15 +273,14 @@
                 rankingBody.innerHTML = ''; // Limpiar tabla
 
                 if (rankings.length === 0) {
-                    rankingBody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-gray-500">Aún no hay puntajes. ¡Sé el primero!</td></tr>';
+                    rankingBody.innerHTML = '<tr><td colspan="3">Aún no hay puntajes. ¡Sé el primero!</td></tr>';
                 } else {
                     rankings.forEach((entry, index) => {
                         const row = document.createElement('tr');
-                        row.className = 'bg-white border-b';
                         row.innerHTML = `
-                            <td class="px-4 py-2 font-medium text-gray-900">${index + 1}</td>
-                            <td class="px-4 py-2">${entry.name}</td>
-                            <td class="px-4 py-2 font-bold ${entry.score === 0 ? 'text-red-500' : 'text-green-600'}">${entry.score}</td>
+                            <td>${index + 1}</td>
+                            <td>${entry.name}</td>
+                            <td>${entry.score}</td>
                         `;
                         rankingBody.appendChild(row);
                     });
@@ -291,13 +291,13 @@
             // --- Manejo de Modales ---
 
             function showModal(modalElement) {
-                modalElement.classList.remove('hidden');
-                setTimeout(() => modalElement.style.opacity = 1, 10);
+                modalElement.style.pointerEvents = 'auto';
+                modalElement.style.opacity = 1;
             }
 
             function hideModal(modalElement) {
                 modalElement.style.opacity = 0;
-                setTimeout(() => modalElement.classList.add('hidden'), 250);
+                modalElement.style.pointerEvents = 'none';
             }
 
             // --- Funciones de Dibujo en Canvas ---

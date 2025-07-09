@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serious Game: EDS</title>
+    <link rel="stylesheet" href="../style.css">
     <style>
         :root {
             --primary-color: #007bff;
@@ -16,7 +17,6 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 1rem;
             background-color: var(--background-color);
@@ -194,7 +194,9 @@
         <button class="restart-btn" id="restart-btn">Reiniciar Juego</button>
     </div>
 
-    <script>
+    <script type="module">
+        import { GameState } from '../gameState.js';
+        import { sendScore } from '../utils/sendScore.js';
         document.addEventListener('DOMContentLoaded', function() {
             // --- 1. CONFIGURACIÓN INICIAL Y VARIABLES ---
             const correctWords = ['facilitated', 'community', 'images', 'narration', 'distinguishes', 'constructed', 'community'];
@@ -324,6 +326,9 @@
 
                 // Comprobar si el juego ha terminado
                 if (completedBlanks === blanks.length) {
+                    GameState.saveScore('completar', currentScore);
+                    GameState.unlock('unir');
+                    sendScore('completar', currentScore);
                     setTimeout(() => alert(`¡Felicidades! Has completado el texto con una puntuación de ${currentScore}.`), 100);
                 }
             }
@@ -349,5 +354,4 @@
         });
     </script>
 
-</body>
-</html>
+</body></html>
