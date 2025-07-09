@@ -23,11 +23,15 @@ form.addEventListener('submit',async e=>{
   const name=document.getElementById('name').value.trim();
   const email=document.getElementById('email').value.trim();
   if(!name||!email) return;
-  await fetch('https://script.google.com/macros/s/AKfycbxWb1aaP8S_nGKPUwiLexT_3Z2Zr66l0k--G0DK7UKyO_05-FsmQCKrO3hGHOcK-L3F/exec',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({type:'register',name,email})
-  });
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbxWb1aaP8S_nGKPUwiLexT_3Z2Zr66l0k--G0DK7UKyO_05-FsmQCKrO3hGHOcK-L3F/exec',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type:'register',name,email})
+    });
+  } catch(err){
+    console.error('Error enviando registro',err);
+  }
   GameState.setUser({name,email});
   location.href='index.html';
 });
