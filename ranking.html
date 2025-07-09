@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card" style="max-width:400px;margin:2rem auto;">
+    <h1>Ranking Ahorcado</h1>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;text-align:left;">
+        <thead>
+          <tr><th>#</th><th>Nombre</th><th>Puntaje</th></tr>
+        </thead>
+        <tbody id="ranking-body"></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const rankings = JSON.parse(localStorage.getItem('hangmanRankingEDS_v1') || '[]');
+    const body = document.getElementById('ranking-body');
+    if(rankings.length===0){
+      body.innerHTML = '<tr><td colspan="3">Aún no hay puntajes.</td></tr>';
+    } else {
+      rankings.slice(0,100).forEach((r,i)=>{
+        const row=document.createElement('tr');
+        row.innerHTML=`<td>${i+1}</td><td>${r.name}</td><td>${r.score}</td>`;
+        body.appendChild(row);
+      });
+    }
+  </script>
+  <nav class="bottom-nav">
+    <a href="index.html">Inicio</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="index.html">Niveles</a>
+  </nav>
+</body>
+</html>
