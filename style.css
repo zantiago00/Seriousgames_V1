@@ -67,3 +67,28 @@ button:focus,
   margin-left: 0.5rem;
   font-weight: bold;
 }
+
+/* Barra de navegación inferior */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: var(--color-primary);
+  z-index: 1000;
+}
+.bottom-nav a {
+  flex: 1;
+  color: #fff;
+  padding: 0.75rem;
+  text-align: center;
+  text-decoration: none;
+}
+.bottom-nav a:hover {
+  background: var(--color-secondary);
+}
+
+body {
+  padding-bottom: 3.5rem; /* espacio para la barra inferior */
+}
