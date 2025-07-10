@@ -21,8 +21,10 @@
   </main>
   <script type="module">
     import { toggleDarkMode, loadDarkMode } from './theme.js';
+    import { renderNav } from './nav.js';
     loadDarkMode();
     document.addEventListener('DOMContentLoaded',()=>{
+      renderNav('.');
       document.getElementById('dark-toggle').addEventListener('click',toggleDarkMode);
     });
 
@@ -33,16 +35,21 @@
     } else {
       rankings.slice(0,100).forEach((r,i)=>{
         const row=document.createElement('tr');
-        row.innerHTML=`<td>${i+1}</td><td>${r.name}</td><td>${r.score}</td>`;
+        const pos=document.createElement('td');
+        pos.textContent=i+1;
+        const name=document.createElement('td');
+        name.textContent=r.name;
+        const sc=document.createElement('td');
+        sc.textContent=r.score;
+        row.appendChild(pos);
+        row.appendChild(name);
+        row.appendChild(sc);
         body.appendChild(row);
       });
     }
   </script>
-  <nav class="bottom-nav">
-    <a href="register.html" aria-label="Registro">🤚</a>
-    <a href="index.html" aria-label="Juegos">🎮</a>
-    <a href="ranking.html" aria-label="Ranking">📊</a>
-    <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
-  </nav>
+  <div id="nav-holder"></div>
 </body>
 </html>
+
+
