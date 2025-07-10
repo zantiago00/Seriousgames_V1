@@ -12,6 +12,7 @@
     <form id="register-form">
       <label>Nombre:<br><input id="name" required></label><br><br>
       <label>Correo:<br><input id="email" type="email" required></label><br><br>
+      <label>Apodo:<br><input id="nickname" required></label><br><br>
       <button class="btn" type="submit">Guardar</button>
     </form>
   </main>
@@ -22,24 +23,20 @@ form.addEventListener('submit',async e=>{
   e.preventDefault();
   const name=document.getElementById('name').value.trim();
   const email=document.getElementById('email').value.trim();
-  if(!name||!email) return;
+  const nickname=document.getElementById('nickname').value.trim();
+  if(!name||!email||!nickname) return;
   try {
     await fetch('https://script.google.com/macros/s/AKfycby-b4Jn17hr1W_V3jcvkhM-fp7i2kHHvO7f8jCIOMySZQ3BJWQUJYP0Yhh4BDcTRPhQ/exec',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({type:'register',name,email})
+      body:JSON.stringify({type:'register',name,email,nickname})
     });
   } catch(err){
     console.error('Error enviando registro',err);
   }
-  GameState.setUser({name,email});
+  GameState.setUser({name,email,nickname});
   location.href='index.html';
 });
 </script>
-<nav class="bottom-nav">
-  <a href="index.html">Inicio</a>
-  <a href="ranking.html">Ranking</a>
-  <a href="index.html">Niveles</a>
-</nav>
 </body>
 </html>
