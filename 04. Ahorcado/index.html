@@ -113,8 +113,10 @@
         import { GameState } from '../gameState.js';
         import { sendScore } from '../utils/sendScore.js';
         import { toggleDarkMode, loadDarkMode } from '../theme.js';
+        import { renderNav } from '../nav.js';
         document.addEventListener('DOMContentLoaded', () => {
             loadDarkMode();
+            renderNav('..');
             document.getElementById('dark-toggle').addEventListener('click',toggleDarkMode);
             // Constantes y Elementos del DOM
             const wordContainer = document.getElementById('word-container');
@@ -286,11 +288,15 @@
                 } else {
                     rankings.forEach((entry, index) => {
                         const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${entry.name}</td>
-                            <td>${entry.score}</td>
-                        `;
+                        const pos = document.createElement('td');
+                        pos.textContent = index + 1;
+                        const name = document.createElement('td');
+                        name.textContent = entry.name;
+                        const sc = document.createElement('td');
+                        sc.textContent = entry.score;
+                        row.appendChild(pos);
+                        row.appendChild(name);
+                        row.appendChild(sc);
                         rankingBody.appendChild(row);
                     });
                 }
@@ -368,11 +374,7 @@
             setupGame();
         });
     </script>
-    <nav class="bottom-nav">
-        <a href="../register.html" aria-label="Registro">🤚</a>
-        <a href="../index.html" aria-label="Juegos">🎮</a>
-        <a href="../ranking.html" aria-label="Ranking">📊</a>
-        <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
-    </nav>
+    <div id="nav-holder"></div>
 </body>
 </html>
+

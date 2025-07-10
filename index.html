@@ -22,15 +22,11 @@
     </div>
     <div id="levels" class="levels" style="margin-top:1rem;"></div>
   </main>
-  <nav class="bottom-nav">
-    <a href="register.html" aria-label="Registro">🤚</a>
-    <a href="index.html" aria-label="Juegos">🎮</a>
-    <a href="ranking.html" aria-label="Ranking">📊</a>
-    <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
-  </nav>
+  <div id="nav-holder"></div>
 <script type="module">
 import { GameState } from './gameState.js';
 import { toggleDarkMode, loadDarkMode } from './theme.js';
+import { renderNav } from './nav.js';
 const user=GameState.getUser();
 if(!user){
   location.href='register.html';
@@ -46,6 +42,7 @@ function refresh(){
 }
 refresh();
 loadDarkMode();
+renderNav('.');
 document.getElementById('dark-toggle').addEventListener('click',toggleDarkMode);
 
 const levels=[
@@ -71,3 +68,4 @@ for(const lvl of levels){
 </script>
 </body>
 </html>
+

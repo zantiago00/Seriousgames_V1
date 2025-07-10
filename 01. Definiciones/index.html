@@ -141,6 +141,7 @@
         import { GameState } from '../gameState.js';
         import { sendScore } from '../utils/sendScore.js';
         import { toggleDarkMode, loadDarkMode } from '../theme.js';
+        import { renderNav } from '../nav.js';
         const optionsContainer = document.getElementById('options-container');
         const feedbackElement = document.getElementById('feedback');
         const restartBtn = document.getElementById('restart-btn');
@@ -169,13 +170,6 @@
             ]
         };
 
-        // Función para barajar un array (algoritmo Fisher-Yates)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
 
         function startGame() {
             // Limpiar estado anterior
@@ -236,15 +230,11 @@
         // Iniciar el juego al cargar la página
     document.addEventListener("DOMContentLoaded", () => {
         loadDarkMode();
+        renderNav('..');
         document.getElementById('dark-toggle').addEventListener('click',toggleDarkMode);
         startGame();
     });
     </script>
-    <nav class="bottom-nav">
-        <a href="../register.html" aria-label="Registro">🤚</a>
-        <a href="../index.html" aria-label="Juegos">🎮</a>
-        <a href="../ranking.html" aria-label="Ranking">📊</a>
-        <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
-    </nav>
+    <div id="nav-holder"></div>
 </body>
 </html>

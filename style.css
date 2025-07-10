@@ -6,6 +6,11 @@
   --color-secondary: #e29578;
   --color-bg: #f6f5f4;
   --color-text: #222;
+  --color-accent: #9b5de5;
+  --color-danger: #e63946;
+  --color-success: #2a9d8f;
+  --color-info: #1e90ff;
+  --color-warning: #e9c46a;
 }
 
 * {

@@ -4,9 +4,14 @@ const ENDPOINT =
 export async function sendScore(gameKey, score){
   const { name, email } = GameState.getUser();
   if(!name || !email) return;
-  await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'score', name, email, game: gameKey, score })
-  });
+  try{
+    await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'score', name, email, game: gameKey, score })
+    });
+  }catch(err){
+    console.error('Error enviando puntaje', err);
+  }
 }
+
