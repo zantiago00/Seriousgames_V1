@@ -20,9 +20,11 @@
 <script type="module">
 import { GameState } from './gameState.js';
 import { toggleDarkMode, loadDarkMode } from './theme.js';
+import { renderNav } from './nav.js';
 const form=document.getElementById('register-form');
 loadDarkMode();
 document.addEventListener('DOMContentLoaded',()=>{
+  renderNav('.');
   document.getElementById('dark-toggle').addEventListener('click',toggleDarkMode);
 });
 form.addEventListener('submit',async e=>{
@@ -44,11 +46,6 @@ form.addEventListener('submit',async e=>{
   location.href='index.html';
 });
 </script>
-  <nav class="bottom-nav">
-    <a href="register.html" aria-label="Registro">🤚</a>
-    <a href="index.html" aria-label="Juegos">🎮</a>
-    <a href="ranking.html" aria-label="Ranking">📊</a>
-    <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
-  </nav>
+  <div id="nav-holder"></div>
 </body>
 </html>
