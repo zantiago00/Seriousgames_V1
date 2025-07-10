@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trivia Avanzada EDS</title>
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../theme.css">
   <style>
     #question { margin: 1rem 0; font-weight:bold; }
     #options button { text-align:left; margin-bottom:0.5rem; }
@@ -26,10 +27,15 @@
     <a href="../register.html" aria-label="Registro">🤚</a>
     <a href="../index.html" aria-label="Juegos">🎮</a>
     <a href="../ranking.html" aria-label="Ranking">📊</a>
+    <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
   </nav>
 <script type="module">
 import { GameState } from '../gameState.js';
 import { sendScore } from '../utils/sendScore.js';
+import { toggleDarkMode, loadDarkMode } from '../theme.js';
+
+loadDarkMode();
+document.getElementById('dark-toggle').addEventListener('click', toggleDarkMode);
 
 const questions = [
     {

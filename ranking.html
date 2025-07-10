@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ranking</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body>
   <main class="card" style="max-width:400px;margin:2rem auto;">
@@ -18,7 +19,13 @@
       </table>
     </div>
   </main>
-  <script>
+  <script type="module">
+    import { toggleDarkMode, loadDarkMode } from './theme.js';
+    loadDarkMode();
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.getElementById('dark-toggle').addEventListener('click',toggleDarkMode);
+    });
+
     const rankings = JSON.parse(localStorage.getItem('hangmanRankingEDS_v1') || '[]');
     const body = document.getElementById('ranking-body');
     if(rankings.length===0){
@@ -35,6 +42,7 @@
     <a href="register.html" aria-label="Registro">🤚</a>
     <a href="index.html" aria-label="Juegos">🎮</a>
     <a href="ranking.html" aria-label="Ranking">📊</a>
+    <button id="dark-toggle" aria-label="Tema oscuro" class="btn">🌙</button>
   </nav>
 </body>
 </html>
