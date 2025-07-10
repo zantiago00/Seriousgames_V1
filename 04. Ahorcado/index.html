@@ -206,6 +206,7 @@
 
             function handleGameEnd(isWin) {
                 endGame();
+                GameState.unlock('trivia');
 
                 if (isWin) {
                     nameModalTitle.textContent = '¡Ganaste!';
