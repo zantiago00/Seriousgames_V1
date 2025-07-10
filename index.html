@@ -9,54 +9,59 @@
 <body>
   <main class="card" style="max-width:600px;margin:2rem auto;">
     <h1>Serious Game</h1>
-    <p id="user-info"></p>
-    <p>Puntaje total: <span id="total-score">0</span></p>
-    <div id="games" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;"></div>
+    <div id="user-info" class="user-info">
+      <span id="user-name"></span>
+      <span id="user-nick" class="nick"></span>
+    </div>
+    <div id="score-display" class="score-display">
+      <span class="score-label">puntaje</span>
+      <span id="d1" class="digit">0</span>
+      <span id="d2" class="digit">0</span>
+      <span id="d3" class="digit">0</span>
+    </div>
+    <div id="levels" class="levels" style="margin-top:1rem;"></div>
   </main>
+  <div id="nav-icons" class="icon-nav">
+    <span>🤚</span>
+    <span>🎮</span>
+    <span>📊</span>
+  </div>
 <script type="module">
 import { GameState } from './gameState.js';
 const user=GameState.getUser();
 if(!user){
   location.href='register.html';
 }
-const info=document.getElementById('user-info');
-info.textContent=`${user.name} (${user.email})`;
-const total=document.getElementById('total-score');
+document.getElementById('user-name').textContent=user.name;
+document.getElementById('user-nick').textContent='@'+user.nickname;
+
 function refresh(){
-  total.textContent=GameState.getTotalScore();
+  const total=String(GameState.getTotalScore()).padStart(3,'0');
+  document.getElementById('d1').textContent=total[0];
+  document.getElementById('d2').textContent=total[1];
+  document.getElementById('d3').textContent=total[2];
 }
 refresh();
-const games=[
-  {key:'definiciones',name:'Definiciones',path:'01. Definiciones/index.html'},
-  {key:'completar',name:'Completar palabras',path:'02. Completar palabras/index.html'},
-  {key:'unir',name:'Unir palabras',path:'03. Unir palabras/index.html'},
-  {key:'ahorcado',name:'Ahorcado',path:'04. Ahorcado/index.html'}
+
+const levels=[
+  {key:'definiciones',label:'RECORDAR',path:'01. Definiciones/index.html'},
+  {key:'completar',label:'COMPRENDER',path:'02. Completar palabras/index.html'},
+  {key:'unir',label:'APLICAR',path:'03. Unir palabras/index.html'},
+  {key:'ahorcado',label:'ANALIZAR',path:'04. Ahorcado/index.html'}
 ];
-const container=document.getElementById('games');
-for(const g of games){
-  const entry=document.createElement('div');
-  entry.className='game-entry';
-  const btn=document.createElement('a');
-  btn.textContent=g.name + (GameState.isUnlocked(g.key)||g.key==='definiciones'? '' : ' 🔒');
-  btn.href=g.path;
-  btn.className='btn';
-  if(g.key!=='definiciones' && !GameState.isUnlocked(g.key)){
-    btn.classList.add('disabled');
-    btn.href='#';
-    btn.setAttribute('aria-disabled','true');
+const container=document.getElementById('levels');
+for(const lvl of levels){
+  const link=document.createElement('a');
+  link.textContent=lvl.label;
+  link.href=lvl.path;
+  link.className='level-link btn';
+  if(lvl.key!=='definiciones' && !GameState.isUnlocked(lvl.key)){
+    link.classList.add('disabled');
+    link.href='#';
+    link.setAttribute('aria-disabled','true');
   }
-  const score=document.createElement('span');
-  score.className='score';
-  score.textContent='Puntaje: '+GameState.getScore(g.key);
-  entry.appendChild(btn);
-  entry.appendChild(score);
-  container.appendChild(entry);
+  container.appendChild(link);
 }
 </script>
-<nav class="bottom-nav">
-  <a href="index.html">Inicio</a>
-  <a href="ranking.html">Ranking</a>
-  <a href="index.html">Niveles</a>
-</nav>
 </body>
 </html>
