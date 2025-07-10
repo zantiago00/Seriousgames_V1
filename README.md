@@ -8,6 +8,7 @@ Este repositorio contiene cuatro mini-juegos educativos desarrollados en HTML, C
 - `02. Completar palabras/` – Texto con espacios en blanco para rellenar.
 - `03. Unir palabras/` – Juego de emparejar conceptos con sus definiciones.
 - `04. Ahorcado/` – Versión sencilla del juego del ahorcado con sistema de ranking.
+- `05. Trivia avanzada/` – Preguntas de opción múltiple para evaluar conocimientos.
 
 Cada carpeta mantiene su propio `index.html`, pero puedes acceder a ellas desde `index.html` en la raíz.
 
