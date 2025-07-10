@@ -20,6 +20,7 @@
             color: var(--font-color);
             margin: 0;
             padding: 20px;
+            padding-bottom: calc(20px + 3.5rem);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -231,7 +232,12 @@
         restartBtn.addEventListener("click", startGame);
 
         // Iniciar el juego al cargar la página
-        document.addEventListener("DOMContentLoaded", startGame);
+    document.addEventListener("DOMContentLoaded", startGame);
     </script>
+    <nav class="bottom-nav">
+        <a href="../register.html" aria-label="Registro">🤚</a>
+        <a href="../index.html" aria-label="Juegos">🎮</a>
+        <a href="../ranking.html" aria-label="Ranking">📊</a>
+    </nav>
 </body>
 </html>
